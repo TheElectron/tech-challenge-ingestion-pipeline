@@ -18,18 +18,9 @@ A solução segue uma arquitetura *serverless*, priorizando o desacoplamento de 
 
 ### Fluxo de Dados
 
-flowchart LR
-    A[B3 Website] -->|Extração Diária| B(Glue Job: Extract)
-    B -->|Parquet| C[(S3: Raw Zone)]
-    C -->|Trigger Event| D(AWS Lambda)
-    D -->|Start Job + Args| E(Glue Job: Transform)
-    E -->|Read Window| C
-    E -->|Parquet + Catalog| F[(S3: Refined Zone)]
-    F -->|Query| G[Amazon Athena]
-
-
 O fluxo de dados segue o padrão Medallion (Bronze/Silver):
-'''
+
+```mermaid
 flowchart TD
     %% Definição de Estilos
     classDef aws fill:#FF9900,stroke:#232F3E,stroke-width:2px,color:white;
@@ -82,7 +73,6 @@ flowchart TD
     linkStyle 0,3,5,6,7,9,10 stroke:#FF9900,stroke-width:2px;
     linkStyle 4,8 stroke:#3F8624,stroke-width:2px;
     linkStyle 11,12,13 stroke:#232F3E,stroke-width:1px,stroke-dasharray: 5 5;
-'''
 
 - Raw Layer (Bronze):
     Responsável pela ingestão. O Job Glue (extract_b3_data.py) realiza a engenharia reversa da API da B3, extraindo os dados da carteira do dia e armazenando-os em formato Parquet com particionamento diário (dt=YYYY-MM-DD).
