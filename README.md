@@ -20,6 +20,7 @@ A solução segue uma arquitetura *serverless*, priorizando o desacoplamento de 
 
 O fluxo de dados segue o padrão Medallion (Bronze/Silver):
 
+```mermaid
 flowchart TD
     %% Definição de Estilos
     classDef aws fill:#FF9900,stroke:#232F3E,stroke-width:2px,color:white;
