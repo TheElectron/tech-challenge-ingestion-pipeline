@@ -20,60 +20,69 @@ A solução segue uma arquitetura *serverless*, priorizando o desacoplamento de 
 
 O fluxo de dados segue o padrão Medallion (Bronze/Silver):
 
-```mermaid
 flowchart TD
     %% Definição de Estilos
     classDef aws fill:#FF9900,stroke:#232F3E,stroke-width:2px,color:white;
     classDef storage fill:#3F8624,stroke:#232F3E,stroke-width:2px,color:white;
     classDef external fill:#999999,stroke:#232F3E,stroke-width:2px,color:white;
     classDef trigger fill:#E7157B,stroke:#232F3E,stroke-width:2px,color:white;
+
     %% Fontes e Agendador
     subgraph Origem ["Fonte de Dados Externos"]
-        B3[API Web B3\n(Hidden JSON)]:::external
+        B3[API Web B3<br/>Hidden JSON]:::external
     end
-    Scheduler(EventBridge\nScheduler Diário):::trigger
+
+    Scheduler(EventBridge<br/>Scheduler Diário):::trigger
+
     %% Camada de Ingestão
     subgraph Bronze ["Camada Raw (Bronze)"]
-        GlueExt[Glue Job: Extração\nPython Shell]:::aws
-        S3Raw[(S3 Bucket\n/raw\ndt=YYYY-MM-DD)]:::storage
+        GlueExt[Glue Job: Extração<br/>Python Shell]:::aws
+        S3Raw[(S3 Bucket<br/>/raw<br/>dt=YYYY-MM-DD)]:::storage
     end
+
     %% Camada de Orquestração
     subgraph Orchestration ["Orquestração de Eventos"]
-        S3Event>S3 Event PUT\nNotification]:::trigger
-        Lambda[Lambda Function\nTrigger Glue]:::aws
+        S3Event>S3 Event PUT<br/>Notification]:::trigger
+        Lambda[Lambda Function<br/>Trigger Glue]:::aws
     end
+
     %% Camada de Processamento
     subgraph Silver ["Camada Refined (Silver)"]
-        GlueTrans[Glue Job: Transformação\nApache Spark ETL]:::aws
-        S3Ref[(S3 Bucket\n/refined\ndt=, ticker=)]:::storage
-        Catalog[Glue Data Catalog\nDatabase & Tables]:::aws
+        GlueTrans[Glue Job: Transformação<br/>Apache Spark ETL]:::aws
+        S3Ref[(S3 Bucket<br/>/refined<br/>dt=, ticker=)]:::storage
+        Catalog[Glue Data Catalog<br/>Database & Tables]:::aws
     end
+
     %% Camada de Consumo
     subgraph Serving ["Camada de Consumo"]
-        Athena[Amazon Athena\nSQL Queries]:::aws
-        Analista((Analista\nUsuário))
+        Athena[Amazon Athena<br/>SQL Queries]:::aws
+        Analista((Analista<br/>Usuário))
     end
+
     %% Fluxo Principal
     Scheduler -->|1. Dispara às 18h| GlueExt
     GlueExt -- "2. HTTPS GET" --> B3
     B3 -- JSON --> GlueExt
     GlueExt -- "3. Salva Parquet (Limpa & Escreve)" --> S3Raw
+
     S3Raw -.->|4. Detecta novo arquivo| S3Event
     S3Event -->|5. Aciona| Lambda
     Lambda -- "6. Inicia Job com Argumentos\n(--JOB_DATE, --BUCKET)" --> GlueTrans
+
     GlueTrans -- "7. Lê Janela Histórica\n(Dia atual + 6 dias anteriores)" --> S3Raw
     GlueTrans -- "8. Aplica Regras\n(Média Móvel, Volatilidade)" --> GlueTrans
     GlueTrans -- "9. Salva Parquet Particionado" --> S3Ref
     GlueTrans -- "10. Atualiza Metadados" --> Catalog
+
     %% Fluxo de Consulta
     Analista -->|SQL| Athena
     Athena -->|Consulta Esquema| Catalog
     Athena -->|Lê Dados| S3Ref
+
     %% Linkagem de Estilos
     linkStyle 0,3,5,6,7,9,10 stroke:#FF9900,stroke-width:2px;
     linkStyle 4,8 stroke:#3F8624,stroke-width:2px;
     linkStyle 11,12,13 stroke:#232F3E,stroke-width:1px,stroke-dasharray: 5 5;
-
 - Raw Layer (Bronze):
     Responsável pela ingestão. O Job Glue (extract_b3_data.py) realiza a engenharia reversa da API da B3, extraindo os dados da carteira do dia e armazenando-os em formato Parquet com particionamento diário (dt=YYYY-MM-DD).
 
