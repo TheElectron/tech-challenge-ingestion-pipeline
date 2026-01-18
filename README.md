@@ -68,10 +68,10 @@ flowchart TD
 
     S3Raw -.->|4. Detecta novo arquivo| S3Event
     S3Event -->|5. Aciona| Lambda
-    Lambda -- "6. Inicia Job com Argumentos\n(--JOB_DATE, --BUCKET)" --> GlueTrans
+    Lambda -- "6. Inicia Job com Argumentos<br/>(--JOB_DATE, --BUCKET)" --> GlueTrans
 
-    GlueTrans -- "7. Lê Janela Histórica\n(Dia atual + 6 dias anteriores)" --> S3Raw
-    GlueTrans -- "8. Aplica Regras\n(Média Móvel, Volatilidade)" --> GlueTrans
+    GlueTrans -- "7. Lê Janela Histórica<br/>(Dia atual + 6 dias anteriores)" --> S3Raw
+    GlueTrans -- "8. Aplica Regras<br/>(Média Móvel, Volatilidade)" --> GlueTrans
     GlueTrans -- "9. Salva Parquet Particionado" --> S3Ref
     GlueTrans -- "10. Atualiza Metadados" --> Catalog
 
@@ -84,6 +84,8 @@ flowchart TD
     linkStyle 0,3,5,6,7,9,10 stroke:#FF9900,stroke-width:2px;
     linkStyle 4,8 stroke:#3F8624,stroke-width:2px;
     linkStyle 11,12,13 stroke:#232F3E,stroke-width:1px,stroke-dasharray: 5 5;
+
+    
 - Raw Layer (Bronze):
     Responsável pela ingestão. O Job Glue (extract_b3_data.py) realiza a engenharia reversa da API da B3, extraindo os dados da carteira do dia e armazenando-os em formato Parquet com particionamento diário (dt=YYYY-MM-DD).
 
