@@ -84,8 +84,8 @@ flowchart TD
     linkStyle 0,3,5,6,7,9,10 stroke:#FF9900,stroke-width:2px;
     linkStyle 4,8 stroke:#3F8624,stroke-width:2px;
     linkStyle 11,12,13 stroke:#232F3E,stroke-width:1px,stroke-dasharray: 5 5;
+```
 
-    
 - Raw Layer (Bronze):
     Responsável pela ingestão. O Job Glue (extract_b3_data.py) realiza a engenharia reversa da API da B3, extraindo os dados da carteira do dia e armazenando-os em formato Parquet com particionamento diário (dt=YYYY-MM-DD).
 
