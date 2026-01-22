@@ -12,7 +12,6 @@ Este projeto consiste em um pipeline de engenharia de dados orientado a eventos 
 
 Desenvolvida como entrega final do **Tech Challenge #02** da Pós-Graduação em **Machine Learning Engineering** da FIAP, a solução utiliza o ecossistema AWS para criar um Data Lake escalável. O fluxo extrai diariamente a carteira teórica da B3, ingere os dados brutos, processa métricas financeiras complexas (como Média Móvel e Volatilidade) e disponibiliza as informações para consulta analítica via SQL.
 
-https://drive.google.com/file/d/11uHrzeMQ0TUJu7yoh_OnR7Q2EU7QkprH/view?usp=sharing
 
 ## 🏢 Arquitetura
 
