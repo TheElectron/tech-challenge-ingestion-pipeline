@@ -10,7 +10,7 @@ from pyspark.context import SparkContext
 from awsglue.utils import getResolvedOptions
 from pyspark.sql.types import DoubleType, IntegerType, DateType
 
-# Configuração de Logger
+# Configuração de Logging
 start_time = time.time()
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)

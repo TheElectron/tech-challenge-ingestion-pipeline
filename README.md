@@ -12,6 +12,8 @@ Este projeto consiste em um pipeline de engenharia de dados orientado a eventos 
 
 Desenvolvida como entrega final do **Tech Challenge #02** da Pós-Graduação em **Machine Learning Engineering** da FIAP, a solução utiliza o ecossistema AWS para criar um Data Lake escalável. O fluxo extrai diariamente a carteira teórica da B3, ingere os dados brutos, processa métricas financeiras complexas (como Média Móvel e Volatilidade) e disponibiliza as informações para consulta analítica via SQL.
 
+https://drive.google.com/file/d/11uHrzeMQ0TUJu7yoh_OnR7Q2EU7QkprH/view?usp=sharing
+
 ## 🏢 Arquitetura
 
 A solução segue uma arquitetura *serverless*, priorizando o desacoplamento de componentes, baixo custo operacional e escalabilidade automática.
@@ -148,24 +150,8 @@ b3-data-pipeline/
 - Otimização: Uso de .cache() e Filtros de Partição (Partition Pruning) para leitura eficiente.
 - Saída: Tabela particionada (dt, ticker) registrada no Glue Catalog.
 
-<!-- 🚀 Como Executar
+## 🚀 Entregaveis
 
-1. Pré-requisitos
-Conta AWS ativa.
-
-AWS CLI configurado localmente.
-
-Terraform instalado (v1.0+).
-
-Python 3.9+.
-
-2. Provisionamento da Infraestrutura
-Utilizamos Terraform para criar todos os recursos necessários.
-
-Bash
-
-cd infrastructure/terraform
-terraform init
-terraform plan
-terraform apply
-Isso criará o Bucket S3, as Roles de IAM, a Lambda Trigger e o esqueleto do Job Glue. -->
+- Descrição completa do projeto ✅
+- ⁠Diagrama visual do projeto ✅
+- [Link do vídeo](https://drive.google.com/file/d/11uHrzeMQ0TUJu7yoh_OnR7Q2EU7QkprH/view?usp=sharing)  ✅ 
